@@ -6,99 +6,167 @@
 <title>Beeline</title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="Field intelligence for people who sell to stores.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Beeline — design system
+   The name is the concept: a bee's flight, the shortest line to the honey.
+   Amber is the field, not the trim. Electric blue is the flight line. Red is
+   reserved for state (an account slipping), never for emphasis.
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root{
-  --ink:#14241A; --road:#2C4235; --gold:#C9A24B; --signal:#1F7A44; --warn:#B4622A;
-  --paper:#F4F6F2; --card:#FFFFFF; --rule:#D7DFD8; --dim:#6E7D72; --text:#14241A;
+  --ink:#151007;          /* warm near-black — reads as black, never cold */
+  --ink-2:#2B2008;
+  --honey:#FFB000;        /* the primary. a field colour, not an accent */
+  --honey-lo:#FFD978;
+  --amber:#D97500;        /* the legible step: honey on a light ground */
+  --flight:#0B7FE0;       /* the route line. the deliberate risk */
+  --hot:#E4342E;          /* state only: at risk, slipping, save it */
+  --paper:#FFFBF2;
+  --card:#FFFFFF;
+  --comb:#FFF0CC;
+  --rule:#E8DFC9;
+  --dim:#6B6152;
+  --text:#241B0B;
+  --onink:#FFF7E6;
+  --beedark:#191206;  /* the bee keeps its own colours in both themes */
+  --beelite:#FFF7E6;
   --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
-  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* honeycomb field — one flat-top hex cell, tiled */
+  --combfield:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cg fill='none' stroke='%23D97500' stroke-width='1.4' stroke-opacity='.16'%3E%3Cpath d='M28 0L56 16v32L28 64 0 48V16z'/%3E%3Cpath d='M28 64l28 16v32L28 128 0 112V80z'/%3E%3C/g%3E%3C/svg%3E");
 }
 :root:not([data-theme="light"]){
   @media (prefers-color-scheme: dark){
-    --paper:#0E1611; --card:#16211B; --rule:#2A3A31; --dim:#93A69A;
-    --text:#E8EFE9; --ink:#E8EFE9; --road:#B9CCBF; --warn:#E08A4F;
+    --ink:#FFF3DC;
+    --ink-2:#F0E2C4;
+    --honey:#FFB92B;
+    --honey-lo:#8A6212;
+    --amber:#FFC44D;
+    --flight:#4FA8F5;
+    --hot:#FF6B5E;
+    --paper:#100C05;
+    --card:#1B150B;
+    --comb:#2A2110;
+    --rule:#3A2E19;
+    --dim:#A79A84;
+    --text:#F3E9D6;
+    --onink:#1B150B;
+    --beedark:#191206;
+    --beelite:#FFF7E6;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#0E1611; --card:#16211B; --rule:#2A3A31; --dim:#93A69A;
-  --text:#E8EFE9; --ink:#E8EFE9; --road:#B9CCBF; --warn:#E08A4F;
+  --ink:#FFF3DC;
+  --ink-2:#F0E2C4;
+  --honey:#FFB92B;
+  --honey-lo:#8A6212;
+  --amber:#FFC44D;
+  --flight:#4FA8F5;
+  --hot:#FF6B5E;
+  --paper:#100C05;
+  --card:#1B150B;
+  --comb:#2A2110;
+  --rule:#3A2E19;
+  --dim:#A79A84;
+  --text:#F3E9D6;
+  --onink:#1B150B;
+  --beedark:#191206;
+  --beelite:#FFF7E6;
 }
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--text);
-  font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  font-family:var(--body);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
 /* ── the gate ───────────────────────────────────────────────────────────── */
-#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
-.card{width:100%;max-width:520px}
-.brand{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;
-  padding-bottom:20px;border-bottom:2px solid var(--ink);margin-bottom:28px}
-.logo{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.02em;
-  line-height:1;color:var(--ink)}
-.logo .dot{color:var(--gold)}
-.tagline{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--dim)}
-h1{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.022em;
-  line-height:1.2;margin:0 0 10px;color:var(--ink);text-wrap:balance}
+#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0 0 48px}
+.card{width:100%;max-width:540px}
+.brand{
+  background:var(--ink);color:var(--onink);padding:26px 22px 22px;
+  position:relative;overflow:hidden;
+}
+.brand::after{
+  content:"";position:absolute;inset:0;left:auto;width:220px;
+  background-image:var(--combfield);background-size:56px 97px;opacity:.55;pointer-events:none;
+}
+.brand .row{position:relative;z-index:1}
+.logo{font-family:var(--display);font-weight:800;font-size:31px;letter-spacing:-.03em;
+  line-height:1;color:var(--onink)}
+.logo .dot{color:var(--honey)}
+.tagline{margin-top:8px;font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--honey)}
+.brandbar{height:5px;background:var(--honey)}
+.inner{padding:28px 22px 0}
+h1{font-family:var(--display);font-weight:800;font-size:1.72rem;letter-spacing:-.032em;
+  line-height:1.14;margin:0 0 10px;color:var(--ink);text-wrap:balance}
 .sub{margin:0 0 26px;color:var(--dim);font-size:16px;max-width:46ch}
-label{display:block;font-family:var(--mono);font-size:10.5px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+label{display:block;font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
 input[type=email],input[type=text]{
-  width:100%;padding:13px 14px;font-family:var(--body);font-size:17px;
+  width:100%;padding:13px 14px;font-family:var(--body);font-size:16.5px;
   background:var(--card);color:var(--text);
-  border:1px solid var(--rule);border-radius:4px;margin-bottom:18px}
-input:focus-visible{outline:2px solid var(--signal);outline-offset:1px;border-color:var(--signal)}
-button{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em;
-  width:100%;padding:14px;border:0;border-radius:4px;cursor:pointer;
-  background:var(--signal);color:#fff}
-button:hover{background:#18603A}
-button:disabled{opacity:.5;cursor:not-allowed}
-button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  border:2px solid var(--rule);border-radius:5px;margin-bottom:18px}
+input[type=email]:focus-visible,input[type=text]:focus-visible{
+  outline:0;border-color:var(--amber)}
+button{
+  font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.02em;
+  width:100%;padding:15px;border:2px solid var(--ink);border-radius:5px;cursor:pointer;
+  background:var(--honey);color:#151007}
+button:hover{background:var(--amber);color:#FFF}
+button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--flight);outline-offset:2px}
 
 /* the confidentiality box: a checkbox, with the full text one click away */
-.nda{border:1px solid var(--rule);border-radius:4px;background:var(--card);
+.nda{border:2px solid var(--rule);border-radius:5px;background:var(--card);
   padding:15px 16px;margin-bottom:20px}
-.agree{display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start;
-  font-size:15px;line-height:1.45;color:var(--text);cursor:pointer}
-.agree input{width:19px;height:19px;margin:2px 0 0;accent-color:var(--signal);cursor:pointer}
-.agree a{color:var(--signal);font-weight:600}
-details{margin-top:11px;padding-top:11px;border-top:1px solid var(--rule)}
-summary{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;
+.agree{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;
+  font-size:15.5px;line-height:1.45;color:var(--text);cursor:pointer;
+  font-family:var(--body);font-weight:400;text-transform:none;letter-spacing:0;margin:0}
+.agree input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--amber);cursor:pointer}
+.agree a{color:var(--amber);font-weight:700}
+details{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+summary{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.13em;
   text-transform:uppercase;color:var(--dim);cursor:pointer;list-style:none}
 summary::-webkit-details-marker{display:none}
-summary::before{content:"▸ ";color:var(--gold)}
-details[open] summary::before{content:"▾ "}
-.terms{margin-top:12px;font-size:14px;line-height:1.55;color:var(--dim);
-  max-height:290px;overflow-y:auto;padding-right:6px}
-.terms h3{font-family:var(--display);font-weight:800;font-size:.95rem;color:var(--ink);
-  margin:15px 0 5px;letter-spacing:-.01em}
+summary::before{content:"\25B8  ";color:var(--honey)}
+details[open] summary::before{content:"\25BE  "}
+summary:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.terms{margin-top:13px;font-size:14px;line-height:1.55;color:var(--dim);
+  max-height:300px;overflow-y:auto;padding-right:8px}
+.terms h3{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--ink);
+  margin:16px 0 5px;letter-spacing:-.022em}
 .terms h3:first-child{margin-top:0}
 .terms p{margin:0 0 9px}
-.terms b{color:var(--text)}
-.terms .v{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--dim);border-top:1px solid var(--rule);padding-top:10px;margin-top:13px;display:block}
-.err{color:var(--warn);font-size:15px;margin:0 0 14px;min-height:0}
-.fine{margin:18px 0 0;font-size:13.5px;color:var(--dim);line-height:1.5}
+.terms b{color:var(--text);font-weight:700}
+.terms .v{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);border-top:1px solid var(--rule);padding-top:11px;margin-top:14px;display:block}
+.err{color:var(--hot);font-size:15px;margin:0 0 14px;font-weight:600}
+.fine{margin:16px 0 0;font-size:13.5px;color:var(--dim);line-height:1.5}
 
 /* ── the document ───────────────────────────────────────────────────────── */
 #doc{display:none}
 #doc.on{display:block}
-.bar{position:sticky;top:0;z-index:50;background:var(--paper);
-  border-bottom:1px solid var(--rule);padding:10px 20px;
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.bar .who{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--dim);margin-right:auto}
-.bar .who b{color:var(--text)}
-.dl{font-family:var(--display);font-weight:800;font-size:13.5px;letter-spacing:-.01em;
-  background:var(--ink);color:var(--paper);text-decoration:none;
-  padding:9px 15px;border-radius:4px;white-space:nowrap;width:auto}
-:root[data-theme="dark"] .dl{background:var(--gold);color:#14241A}
-.conf{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--warn);border:1px solid var(--warn);border-radius:3px;padding:4px 8px}
+.bar{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--onink);
+  padding:9px 18px;display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+  border-bottom:3px solid var(--honey)}
+.bar .who{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--onink);opacity:.65;margin-right:auto}
+.bar .who b{color:var(--honey);opacity:1}
+.dl{font-family:var(--display);font-weight:800;font-size:13.5px;letter-spacing:-.02em;
+  background:var(--honey);color:#151007;text-decoration:none;
+  padding:9px 15px;border-radius:4px;white-space:nowrap}
+.dl:hover{background:var(--amber);color:#FFF}
+.dl:focus-visible{outline:3px solid var(--flight);outline-offset:2px}
+.conf{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--honey);border:1px solid var(--honey);border-radius:3px;padding:4px 8px}
+
 @media (max-width:560px){
   body{font-size:16px}
-  .bar .who{width:100%;margin-bottom:2px}
+  .bar{padding:9px 14px}
+  .bar .who{width:100%;margin-bottom:3px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{.bar{display:none}}
@@ -108,11 +176,13 @@ details[open] summary::before{content:"▾ "}
 
 <div id="gate">
   <div class="card">
-    <div class="brand">
+    <div class="brand"><div class="row">
       <div class="logo">Beeline<span class="dot">.</span></div>
       <div class="tagline">Field intelligence for people who sell to stores</div>
-    </div>
+    </div></div>
+    <div class="brandbar"></div>
 
+    <div class="inner">
     <h1 id="h">The field brief</h1>
     <p class="sub" id="s">For brands and processors pitching product into a new market.</p>
 
@@ -124,7 +194,7 @@ details[open] summary::before{content:"▾ "}
       <input id="company" type="text" autocomplete="organization" placeholder="Where you work">
 
       <div class="nda">
-        <label class="agree" for="nda" style="text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400;font-size:15px;color:var(--text);margin:0">
+        <label class="agree" for="nda">
           <input id="nda" type="checkbox" required>
           <span>I'm receiving this in confidence and agree to the
             <a href="#terms" id="openTerms">confidentiality terms</a> below.</span>
@@ -169,6 +239,7 @@ details[open] summary::before{content:"▾ "}
       <p class="fine">No password. We record who opens this and when, so we know who's seen it —
       that's the whole reason for the form.</p>
     </form>
+    </div>
   </div>
 </div>
 
