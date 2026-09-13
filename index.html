@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beeline</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Field intelligence for people who sell to stores.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ink:#14241A; --road:#2C4235; --gold:#C9A24B; --signal:#1F7A44; --warn:#B4622A;
+  --paper:#F4F6F2; --card:#FFFFFF; --rule:#D7DFD8; --dim:#6E7D72; --text:#14241A;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --paper:#0E1611; --card:#16211B; --rule:#2A3A31; --dim:#93A69A;
+    --text:#E8EFE9; --ink:#E8EFE9; --road:#B9CCBF; --warn:#E08A4F;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1611; --card:#16211B; --rule:#2A3A31; --dim:#93A69A;
+  --text:#E8EFE9; --ink:#E8EFE9; --road:#B9CCBF; --warn:#E08A4F;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);
+  font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── the gate ───────────────────────────────────────────────────────────── */
+#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{width:100%;max-width:520px}
+.brand{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:2px solid var(--ink);margin-bottom:28px}
+.logo{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.02em;
+  line-height:1;color:var(--ink)}
+.logo .dot{color:var(--gold)}
+.tagline{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--dim)}
+h1{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.022em;
+  line-height:1.2;margin:0 0 10px;color:var(--ink);text-wrap:balance}
+.sub{margin:0 0 26px;color:var(--dim);font-size:16px;max-width:46ch}
+label{display:block;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+input[type=email],input[type=text]{
+  width:100%;padding:13px 14px;font-family:var(--body);font-size:17px;
+  background:var(--card);color:var(--text);
+  border:1px solid var(--rule);border-radius:4px;margin-bottom:18px}
+input:focus-visible{outline:2px solid var(--signal);outline-offset:1px;border-color:var(--signal)}
+button{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em;
+  width:100%;padding:14px;border:0;border-radius:4px;cursor:pointer;
+  background:var(--signal);color:#fff}
+button:hover{background:#18603A}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* the confidentiality box: a checkbox, with the full text one click away */
+.nda{border:1px solid var(--rule);border-radius:4px;background:var(--card);
+  padding:15px 16px;margin-bottom:20px}
+.agree{display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start;
+  font-size:15px;line-height:1.45;color:var(--text);cursor:pointer}
+.agree input{width:19px;height:19px;margin:2px 0 0;accent-color:var(--signal);cursor:pointer}
+.agree a{color:var(--signal);font-weight:600}
+details{margin-top:11px;padding-top:11px;border-top:1px solid var(--rule)}
+summary{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--gold)}
+details[open] summary::before{content:"▾ "}
+.terms{margin-top:12px;font-size:14px;line-height:1.55;color:var(--dim);
+  max-height:290px;overflow-y:auto;padding-right:6px}
+.terms h3{font-family:var(--display);font-weight:800;font-size:.95rem;color:var(--ink);
+  margin:15px 0 5px;letter-spacing:-.01em}
+.terms h3:first-child{margin-top:0}
+.terms p{margin:0 0 9px}
+.terms b{color:var(--text)}
+.terms .v{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);border-top:1px solid var(--rule);padding-top:10px;margin-top:13px;display:block}
+.err{color:var(--warn);font-size:15px;margin:0 0 14px;min-height:0}
+.fine{margin:18px 0 0;font-size:13.5px;color:var(--dim);line-height:1.5}
+
+/* ── the document ───────────────────────────────────────────────────────── */
+#doc{display:none}
+#doc.on{display:block}
+.bar{position:sticky;top:0;z-index:50;background:var(--paper);
+  border-bottom:1px solid var(--rule);padding:10px 20px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar .who{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);margin-right:auto}
+.bar .who b{color:var(--text)}
+.dl{font-family:var(--display);font-weight:800;font-size:13.5px;letter-spacing:-.01em;
+  background:var(--ink);color:var(--paper);text-decoration:none;
+  padding:9px 15px;border-radius:4px;white-space:nowrap;width:auto}
+:root[data-theme="dark"] .dl{background:var(--gold);color:#14241A}
+.conf{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--warn);border:1px solid var(--warn);border-radius:3px;padding:4px 8px}
+@media (max-width:560px){
+  body{font-size:16px}
+  .bar .who{width:100%;margin-bottom:2px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.bar{display:none}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <div class="brand">
+      <div class="logo">Beeline<span class="dot">.</span></div>
+      <div class="tagline">Field intelligence for people who sell to stores</div>
+    </div>
+
+    <h1 id="h">The field brief</h1>
+    <p class="sub" id="s">For brands and processors pitching product into a new market.</p>
+
+    <form id="f" novalidate>
+      <label for="email">Your email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+
+      <label for="company">Company <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input id="company" type="text" autocomplete="organization" placeholder="Where you work">
+
+      <div class="nda">
+        <label class="agree" for="nda" style="text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400;font-size:15px;color:var(--text);margin:0">
+          <input id="nda" type="checkbox" required>
+          <span>I'm receiving this in confidence and agree to the
+            <a href="#terms" id="openTerms">confidentiality terms</a> below.</span>
+        </label>
+        <details id="terms">
+          <summary>Click here to read them</summary>
+          <div class="terms">
+            <h3>What this covers</h3>
+            <p>The brief you're about to read, anything shown in a follow-up demo, and any figures,
+            screenshots, methods, roadmap or commercial terms in them. Call all of it
+            <b>the Confidential Information</b>. It's non-public and it's shared with you on purpose.</p>
+
+            <h3>What you're agreeing to</h3>
+            <p><b>Use it to evaluate, and nothing else.</b> You're reading this to decide whether to
+            work with us — not to inform a competing build, a competing pitch, or a client of yours
+            doing either.</p>
+            <p><b>Keep it inside.</b> You can show it to colleagues and advisers who need to see it
+            for the same evaluation, provided they're held to terms at least this strict. Anyone else
+            needs our okay in writing first.</p>
+            <p><b>Don't republish it.</b> No posting, forwarding outside your company, or reproducing
+            it in your own materials.</p>
+
+            <h3>What it doesn't cover</h3>
+            <p>Anything you already knew, anything that's public without you making it so, anything a
+            third party gives you legitimately, and anything you work out independently without using
+            this. If a court or regulator compels disclosure, comply — just tell us first if you're
+            allowed to.</p>
+
+            <h3>The practical bits</h3>
+            <p><b>Two years</b> from the day you accept, then this lapses. Ask and we'll confirm in
+            writing that you've deleted your copies. Nothing here transfers ownership, grants a
+            licence, or obliges either of us to do a deal. It's governed by New York law.</p>
+            <p>Accepting records your email address, the version below, and the time — the same way
+            a signature would.</p>
+            <span class="v">Beeline confidentiality terms &middot; version 1.0 &middot; Canis Major Partners</span>
+          </div>
+        </details>
+      </div>
+
+      <p class="err" id="err" role="alert"></p>
+      <button id="go" type="submit">Read the brief</button>
+      <p class="fine">No password. We record who opens this and when, so we know who's seen it —
+      that's the whole reason for the form.</p>
+    </form>
+  </div>
+</div>
+
+<div id="doc">
+  <div class="bar">
+    <div class="who">Shared with <b id="reader"></b></div>
+    <span class="conf">Confidential</span>
+    <a class="dl" id="dl" href="#">Download PDF</a>
+  </div>
+  <div id="body"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var API = 'https://gate-production-a002.up.railway.app';
+
+  var DOCS = {
+    brand: {
+      h: 'The field brief',
+      s: 'For brands and processors pitching product into a new market.'
+    },
+    provider: {
+      h: 'The licensing brief',
+      s: 'Why a market-data company should license the field delivery layer for its feed.'
+    }
+  };
+
+  var q = new URLSearchParams(location.search);
+  var doc = q.get('d') === 'provider' ? 'provider' : 'brand';
+  document.getElementById('h').textContent = DOCS[doc].h;
+  document.getElementById('s').textContent = DOCS[doc].s;
+  document.title = 'Beeline — ' + DOCS[doc].h.replace(/^The /, '');
+
+  var $ = function (id) { return document.getElementById(id); };
+  var err = $('err'), go = $('go');
+
+  // The link inside the checkbox label opens the terms rather than jumping the page.
+  $('openTerms').addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    $('terms').open = true;
+    $('terms').scrollIntoView({ block: 'nearest' });
+  });
+
+  function show(html, title, token, email) {
+    $('gate').style.display = 'none';
+    $('body').innerHTML = html;
+    $('reader').textContent = email;
+    $('dl').href = API + '/api/pdf/' + doc + '?t=' + encodeURIComponent(token);
+    $('doc').classList.add('on');
+    document.title = title;
+    window.scrollTo(0, 0);
+  }
+
+  function enter(email, company) {
+    err.textContent = '';
+    go.disabled = true;
+    go.textContent = 'Opening…';
+    var d = new Date();
+    fetch(API + '/api/enter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email, company: company, doc: doc, nda: true,
+        screen: screen.width + '×' + screen.height,
+        tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || ''),
+        localTime: d.toString(),
+        referrer: document.referrer || ''
+      })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok) { throw new Error(res.j.error || 'Something went wrong.'); }
+        try {
+          localStorage.setItem('beeline.reader', JSON.stringify({ email: email, company: company }));
+        } catch (e) { /* private window — the view is still logged server-side */ }
+        show(res.j.html, res.j.title, res.j.token, email);
+      })
+      .catch(function (e) {
+        err.textContent = e.message || 'Could not reach the server. Try again in a moment.';
+        go.disabled = false;
+        go.textContent = 'Read the brief';
+      });
+  }
+
+  $('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = $('email').value.trim();
+    if (!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(email)) {
+      err.textContent = 'Please enter a valid email address.';
+      $('email').focus();
+      return;
+    }
+    if (!$('nda').checked) {
+      err.textContent = 'Please accept the confidentiality terms to continue.';
+      $('terms').open = true;
+      return;
+    }
+    enter(email, $('company').value.trim());
+  });
+
+  // A returning reader goes straight in — the view is still recorded server-side.
+  try {
+    var saved = JSON.parse(localStorage.getItem('beeline.reader') || 'null');
+    if (saved && saved.email) {
+      $('email').value = saved.email;
+      $('company').value = saved.company || '';
+      $('nda').checked = true;
+      enter(saved.email, saved.company || '');
+    }
+  } catch (e) { /* nothing saved */ }
+})();
+</script>
+</body>
+</html>
